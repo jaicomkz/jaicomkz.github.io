@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Privacy Policy — Teleprompter One</title>
+  <meta name="description" content="Teleprompter One collects no data. Scripts and videos stay on your iPhone.">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+  <main>
+    <header>
+      <img class="icon" src="../icon.png" alt="" width="72" height="72">
+      <p class="app">Teleprompter One</p>
+      <h1 id="title">Privacy Policy</h1>
+      <p id="updated" class="muted">Effective October 20, 2026</p>
+      <label class="lang">
+        <span class="visually-hidden">Language</span>
+        <select id="language" aria-label="Language"></select>
+      </label>
+    </header>
+    <article id="content">
+      <section><h2>Summary</h2><p>Teleprompter One does not collect any data about you. There are no accounts, ads, analytics or tracking.</p></section>
+      <section><h2>Camera and microphone</h2><p>The camera and microphone are used only to record videos on your iPhone while you read your script. Nothing is streamed or uploaded.</p></section>
+      <section><h2>Photos</h2><p>The app asks to add videos to Photos only when you save a video. It cannot read your photo library.</p></section>
+      <section><h2>Your scripts and videos</h2><p>Scripts and recorded takes are stored only on your iPhone. They are never sent to us. Scripts may be included in your own device backups; recorded takes are excluded from backups.</p></section>
+      <section><h2>Network</h2><p>The app connects to Apple for App Store purchases. It also reads the current time from apple.com to keep the free export timer accurate. These requests contain no personal data, identifiers or cookies.</p></section>
+      <section><h2>Purchases</h2><p>Subscriptions and offer codes are processed by Apple. We do not receive your payment details.</p></section>
+      <section><h2>Sharing</h2><p>Videos and scripts leave your iPhone only when you choose Share. The app you share to handles them under its own policy.</p></section>
+      <section><h2>Children</h2><p>The app collects no data from anyone, including children.</p></section>
+      <section><h2>Changes</h2><p>If this policy changes, the new version will be posted on this page with a new date.</p></section>
+      <section><h2>Contact</h2><p>Questions about privacy: open an issue at the link below.</p></section>
+    </article>
+    <p><a id="contact" class="button" href="mailto:support@convertoom.com?subject=Teleprompter%20One">Contact support</a></p>
+  </main>
+  <script src="policy.js"></script>
+  <script>
+    (function () {
+      var policy = window.POLICY;
+      var select = document.getElementById("language");
+      Object.keys(policy).forEach(function (code) {
+        var option = document.createElement("option");
+        option.value = code;
+        option.textContent = policy[code].name;
+        select.appendChild(option);
+      });
+
+      function pick() {
+        var fromURL = new URLSearchParams(location.search).get("lang");
+        if (fromURL && policy[fromURL]) return fromURL;
+        var preferred = navigator.languages || [navigator.language || "en"];
+        for (var i = 0; i < preferred.length; i++) {
+          var code = preferred[i].toLowerCase().split("-")[0];
+          if (policy[code]) return code;
+        }
+        return "en";
+      }
+
+      function render(code) {
+        var p = policy[code];
+        document.documentElement.lang = code;
+        document.documentElement.dir = p.dir || "ltr";
+        document.title = p.title + " — Teleprompter One";
+        document.getElementById("title").textContent = p.title;
+        document.getElementById("updated").textContent = p.updated;
+        document.getElementById("contact").textContent = p.contact;
+        var article = document.getElementById("content");
+        article.textContent = "";
+        p.sections.forEach(function (s) {
+          var section = document.createElement("section");
+          var h = document.createElement("h2");
+          h.textContent = s[0];
+          var para = document.createElement("p");
+          para.textContent = s[1];
+          section.appendChild(h);
+          section.appendChild(para);
+          article.appendChild(section);
+        });
+        select.value = code;
+      }
+
+      select.addEventListener("change", function () {
+        render(select.value);
+        history.replaceState(null, "", "?lang=" + select.value);
+      });
+      render(pick());
+    })();
+  </script>
+</body>
+</html>
